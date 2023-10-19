@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Style for the horizontal navigation bar */
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            overflow: hidden;
+            text-align: center; /* Center the navigation items horizontally */
+        }
+    
+        /* Style for individual navigation items */
+        .navbar a {
+            display: inline-block; /* Display navigation items as inline blocks */
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+    
+        /* Change color on hover */
+        .navbar a:hover {
+            background-color: #555;
+        }
+    
+        /* Style for the title */
+        .title {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px;
+        }
+    
+        /* Style for the search bar */
+        .search-bar {
+            text-align: center;
+            padding: 10px;
+        }
+    
+        /* Style for the search input */
+        .search-input {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        body{
+            text-align: center;
+        }
+        h1{
+            font-size: 32px;
+        }
+        .input-container{
+            text-align: left;
+            display: inline-block;
+        }
+        label{
+            display: block;
+            margin-bottom: 10px;
+        }
+        .student-info {
+            text-align: left;
+            padding: 20px;
+            margin: 20px auto; /* Center horizontally */
+            max-width: 600px; /* Adjust the maximum width */
+        }
+    </style>
+    </head>
+    <body>
+    
+    <div class="title">
+    <h1>Student Registration System</h1>
+    <p>John Angelo Sinfuego</p>
+    <p>Z#23649713</p>
+    </div>
+    
+    <div class="search-bar">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search by Last Name...">
+    </div>
+    
+    <div class="navbar">
+    <a href="addStudent.html">Add Student</a>
+    <a href="updateStudent.html">Update Student</a>
+    <a href="deleteStudent.html">Delete Student</a>
+    <a href="displayStudent.html">Display Student</a>
+    <a href="listStudent.html">List Students</a>
+    </div>
+    <title>List All Students</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>List All Students</h1>
+    <a href = "index2.html">Home</a>
+        <br>
+        <br>
+    <button onclick="listStudents()">List All Students</button>
+    <br><br>
+    <div id="mydiv" name="mydiv"></div>
+    <div class="student-info" id="studentInfo"></div>
+
+    <script>
+        function listStudents() {
+            $.ajax({
+                url: "http://localhost:5678/students",
+                type: "get",
+                success: function(response) {
+                    // Assuming the response is an array of student objects, you can loop through them
+                    // and display each student's information.
+                    var studentsHTML = "<ul>";
+                    response.students.forEach(function(student) {
+                        studentsHTML += "<li>Student ID: " + student.record_id + ", Name: " + student.first_name + " " + student.last_name + ", GPA: " + student.gpa + ", Enrolled: " + student.enrolled + "</li>";
+                    });
+                    studentsHTML += "</ul>";
+                    $("#mydiv").html(studentsHTML);
+                },
+                error: function(xhr) {
+                    $("#mydiv").text('Error: ' + xhr.status + ' - ' + xhr.statusText);
+                }
+            });
+        }
+
+        $("#searchInput").on("keypress", function(event) {
+        if (event.key === "Enter") { // Check if the Enter key (key code 13) was pressed
+            event.preventDefault(); // Prevent the default form submission
+            searchStudents(); // Call the searchStudents function
+        }
+    });
+    function searchStudents() {
+        var lastName = $("#searchInput").val();
+
+        $.ajax({
+            url: "http://localhost:5678/students/search/" + lastName,
+            type: "get",
+            success: function(response) {
+                if (response.students.length > 0) {
+                    // Assuming the response is an array of student objects, you can loop through them
+                    // and display each student's information.
+                    var studentsHTML = "<ul>";
+                    response.students.forEach(function(student) {
+                        studentsHTML += "<li style='font-size: 24px;'>Student ID: " + student.record_id + ", Name: " + student.first_name + " " + student.last_name + ", GPA: " + student.gpa + ", Enrolled: " + student.enrolled + "</li>";
+                    });
+                    studentsHTML += "</ul>";
+                    $("#studentInfo").html(studentsHTML); // Display student information in the "studentInfo" div
+                } else {
+                    $("#studentInfo").html("<p style='font-size: 24px;'>No students found with the last name: " + lastName + "</p>"); // Display a message if no students are found
+                }
+            },
+            error: function(xhr) {
+                $("#studentInfo").html("<p style='font-size: 24px;'>Error: " + xhr.status + ' - ' + xhr.statusText + "</p>"); // Display an error message if there is an error
+            }
+        });
+    }
+    </script>
+</body>
+</html>

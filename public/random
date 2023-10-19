@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Style for the horizontal navigation bar */
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            overflow: hidden;
+            text-align: center; /* Center the navigation items horizontally */
+        }
+    
+        /* Style for individual navigation items */
+        .navbar a {
+            display: inline-block; /* Display navigation items as inline blocks */
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+    
+        /* Change color on hover */
+        .navbar a:hover {
+            background-color: #555;
+        }
+    
+        /* Style for the title */
+        .title {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px;
+        }
+    
+        /* Style for the search bar */
+        .search-bar {
+            text-align: center;
+            padding: 10px;
+        }
+    
+        /* Style for the search input */
+        .search-input {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        body{
+            text-align: center;
+        }
+        h1{
+            font-size: 32px;
+        }
+        .input-container{
+            text-align: left;
+            display: inline-block;
+        }
+        label{
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+    </head>
+    <body>
+    
+    <div class="title">
+    <h1>Student Registration System</h1>
+    <p>John Angelo Sinfuego</p>
+    <p>Z#23649713</p>
+    </div>
+    
+    <div class="search-bar">
+    <input type="text" class="search-input" placeholder="Search...">
+    </div>
+    
+    <div class="navbar">
+    <a href="addStudent.html">Add Student</a>
+    <a href="updateStudent.html">Update Student</a>
+    <a href="deleteStudent.html">Delete Student</a>
+    <a href="displayStudent.html">Display Student</a>
+    <a href="listStudent.html">List Students</a>
+    <a href="searchStudent.html">Search Student</a>
+    </div>
+    <title>Delete Student</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Delete Student by ID</h1>
+    <a href = "index2.html">Home</a>
+        <br>
+        <br>
+    <label for="record_id">Student ID:</label>
+    <input type="text" id="record_id" name="record_id"><br><br>
+
+    <button onclick="deleteStudent()">Delete</button>
+    <br><br>
+    <div id="mydiv" name="mydiv"></div>
+
+    <script>
+        function deleteStudent() {
+            var record_id = $("#record_id").val();
+            
+            $.ajax({
+                url: "http://localhost:5678/students/" + record_id,
+                type: "delete",
+                success: function(response) {
+                    $("#mydiv").text("Student with ID " + record_id + " has been deleted.");
+                },
+                error: function(xhr) {
+                    $("#mydiv").text('Error: ' + xhr.status + ' - ' + xhr.statusText);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
